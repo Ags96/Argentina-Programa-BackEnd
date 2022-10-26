@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,6 +30,7 @@ public class PersonaController {
         List<Persona> list = personaService.list();
         return new ResponseEntity(list, HttpStatus.OK);
     }
+    
     @GetMapping("/detail/{id}")
     public ResponseEntity<Persona> getById(@PathVariable("id")int id){
         if(!personaService.existsById(id)){
@@ -47,8 +49,8 @@ public class PersonaController {
         personaService.delete(id);
         return new ResponseEntity(new Mensaje("persona removed"), HttpStatus.OK);
     }*/
-    /*
-    @PostMapping("/create")
+    
+    @PostMapping("/crear")
     public ResponseEntity<?> create(@RequestBody dtoPersona dtopersona){
         if(StringUtils.isBlank(dtopersona.getNombre())){
             return new ResponseEntity(new Mensaje("Name is required"), HttpStatus.BAD_REQUEST);
@@ -58,13 +60,17 @@ public class PersonaController {
         }
         
         Persona persona = new Persona(
-                dtopersona.getNombre(), dtopersona.getDescripcion()
+                dtopersona.getNombre(),
+                dtopersona.getApellido(),
+                dtopersona.getDescripcion(),
+                dtopersona.getImg()
             );
+        
         personaService.save(persona);
         return new ResponseEntity(new Mensaje("Persona added"), HttpStatus.OK);
                 
     }
-    */
+   
     
     @PutMapping("/update/{id}")
     public ResponseEntity<?> update(@PathVariable("id") int id, @RequestBody dtoPersona dtopersona){
@@ -88,5 +94,10 @@ public class PersonaController {
         personaService.save(persona);
         
         return new ResponseEntity(new Mensaje("Persona updated"), HttpStatus.OK);
+    }
+    
+    @GetMapping("/traer/perfil")
+    public Persona findPersona(){
+        return personaService.findPersona(1);
     }
 }
